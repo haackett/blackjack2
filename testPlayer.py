@@ -1,6 +1,6 @@
 import unittest
-from temporaryMasterFile import Player
-from temporaryMasterFile import Card
+from player import Player
+from card import Card
 
 class Tests(unittest.TestCase):
     p = Player()

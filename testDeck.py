@@ -1,7 +1,6 @@
 import unittest
 import random
-from temporaryMasterFile import Deck
-from temporaryMasterFile import Card
+from deck import Deck
 from typing import List 
 
 class Tests(unittest.TestCase):

@@ -1,8 +1,9 @@
 import unittest
 import random
-from temporaryMasterFile import Game
-from temporaryMasterFile import Card
-from temporaryMasterFile import Player
+from game import Game
+from deck import Deck
+from card import Card
+from player import Player
 from typing import List
 
 #create one of each card value to test with
@@ -86,7 +87,6 @@ class Tests(unittest.TestCase):
         self.assertEqual(g.hand_value([ace,ace,ace,ace,queen]), 14)
         self.assertEqual(g.hand_value([ace,ace,ace,ace,queen,king]), 24)
 
-
     def test_check_if_busted(self):
             p = Player()
             players = [p]
@@ -128,6 +128,57 @@ class Tests(unittest.TestCase):
           #check for dealer without BJ, 1 player with BJ, and 1 player without
           players[1].hands[0] = [two, three]
           self.assertEqual(g.check_for_blackjack(players, dealer), [False, True, False])
+
+    def test_hit_player(self):
+        g = Game(Deck())
+        p = Player()
+        players = [p]
+
+        g.hit_player(players, 0, g.deck)
+
+        self.assertEqual(len(p.hands), 1)
+
+    def test_hit_dealer(self):
+        g = Game(Deck())
+        dealer = Player()
+
+        #test with hand val < 17, expecting a hit
+        dealer.hands[0] = [two, two]
+        g.hit_dealer(dealer, g.deck)
+        self.assertGreater(len(dealer.hands[0]), 2)
+
+        #test with hand val == 17, expecting a stand
+        dealer.hands[0] = [queen, seven]
+        g.hit_dealer(dealer, g.deck)
+        self.assertEqual(len(dealer.hands[0]), 2)
+
+        #test with val > 17, expecting a stand
+        dealer.hands[0] = [queen, queen]
+        g.hit_dealer(dealer, g.deck)
+        self.assertEqual(len(dealer.hands[0]), 2)
+
+    def test_bust_dealer(self):
+        g = Game(Deck())
+        dealer = Player()
+
+        #bust dealer and test if new hand has a val of 2
+        g.bust_dealer(dealer)
+        self.assertEqual(g.hand_value(dealer.hands[0]), 2)
+    
+    def test_determine_winners(self):
+        g = Game(Deck())
+        dealer = Player()
+        bustedPlayer,winningPlayer, losingPlayer = Player(), Player(), Player()
+        winningPlayer.hands[0] = [ace]
+        losingPlayer.hands[0] = [nine]
+        dealer.hands[0] = [ten]
+
+        self.assertEqual(g.determine_winners(dealer, [winningPlayer, winningPlayer, winningPlayer]), [True, True, True])
+        self.assertEqual(g.determine_winners(dealer, [losingPlayer, losingPlayer, losingPlayer]), [False, False, False])
+        self.assertEqual(g.determine_winners(dealer, [bustedPlayer, losingPlayer, winningPlayer]), [False, False, True])
+            
+
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
