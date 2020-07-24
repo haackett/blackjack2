@@ -4,7 +4,7 @@ from deck import Deck
 from player import Player
 
 class Display:
-
+    
     def display_busted(self, player: Player, players: List[Player]) -> None:
         #TODO implement this method for multiple hands per player
         if player.isDealer:
