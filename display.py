@@ -30,9 +30,9 @@ class Display:
         if winners.count(True) == 0:
             print("The house wins.")
         else:
-            for player in winners:
+            for index, player in enumerate(winners):
                 if player:
-                    print("Player %s wins!" % (winners.index(player)))
+                    print("Player %s wins!" % (index))
 
     def display_dealer_hand(self, dealer: Player, hidden=True) -> None:
         print("The dealer hand is: ")
