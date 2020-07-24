@@ -57,6 +57,11 @@ class Tests(unittest.TestCase):
     def test_display_dealer_hand(self):
         capturedOutput = StringIO()
         sys.stdout = capturedOutput
+        dealer = Player(isDealer=True)
+        dealer.hands[0] = [Card("2","Spades"), Card("8","Spades")]
+        self.d.display_dealer_hand(dealer)
+        self.d.display_dealer_hand(dealer, hidden=False)
+        self.assertEqual(capturedOutput.getvalue(), "The dealer hand is: \n2 of Spades\nThe dealer hand is: \n2 of Spades\n8 of Spades\n")
         capturedOutput.close()
 
     def test_prompt_player(self):
