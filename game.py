@@ -3,6 +3,7 @@ from card import Card
 from deck import Deck
 from player import Player
 from display import Display
+from hand import Hand
 
 valueConversions = {
     '2' : 2,
@@ -24,78 +25,56 @@ class Game:
     def __init__(self, deck: Deck) -> None:
         self.deck = deck
 
-    def hand_value(self, hand: List[Card]) -> int:
-        """ Returns the integer value of a hand, evaluating aces as 11 whenever optimal."""
-
-        values = []
-        for card in hand:
-            values.append(valueConversions[card.value])
-
-        while (values.count(11) != 0):
-            if (self.sum_values(values) > 21):
-                values[values.index(11)] = 1
-            else: 
-                break
-
-        return self.sum_values(values)
-
-    def sum_values(self, values: List[int]) -> int:
-        """ Helper method for hand_value. Returns the sum of all values in a List"""
-
-        sum = 0
-        for value in values:
-            sum = value + sum
-            
-        return sum
-
-    def check_if_busted(self, player: Player, players: List[Player]) -> bool:
-        # TODO implement this method for multiple hands per player
-            if (self.hand_value(player.hands[0]) > 21):
-                player.bust_hand(0)
-                return True
-            return False
-
+    def check_if_busted(self, player: Player) -> None:
+        for index, hand in enumerate(player.hands):
+            if (hand.hand_value() > 21):
+                player.bust_hand(index)
+        
     def check_for_blackjack(self, players: List[Player], dealer: Player) -> List[bool]:
         blackjacks = []
-        if self.hand_value(dealer.hands[0]) == 21:
+        if dealer.hands[0].hand_value() == 21:
             blackjacks.append(True)
         else:
             blackjacks.append(False)
         for player in players:
-            if self.hand_value(player.hands[0]) == 21:
+            if player.hands[0].hand_value() == 21:
                 blackjacks.append(True)
             else:
                 blackjacks.append(False)
         return blackjacks
 
-    def hit_player(self, players: List[Player], playerID, deck) -> None:
-        players[playerID].hit(deck.deal())
+    def hit_player(self, player, handIndex, deck) -> None:
+        player.hit(deck.deal(), handIndex)
         
     def hit_dealer(self, dealer: Player, deck: Deck) -> None:
         # Dealer hits until its hand value is >= 17
-        while self.hand_value(dealer.hands[0]) < 17:
+        while dealer.hands[0].hand_value() < 17:
             dealer.hit(deck.deal())
 
     def bust_dealer(self, dealer: Player) -> None:
-        dealer.hands[0] = [Card('2','Clubs')]
-        return
+        dealer.bust_hand()
 
-    def determine_winners(self, dealer, players) -> List[bool]:
-        winners = []
+    def determine_standing(self, dealer, players) -> List[List[int]]:
+        #1 : win, 0 : tie, -1 : loss
+        dealerScore = dealer.hands[0].hand_value()
+        standingOfPlayers = []
         for player in players:
-            try:
-                if self.hand_value(player.hands[0]) > self.hand_value(dealer.hands[0]):
-                    winners.append(True)
-                    # TODO pay bets with a function here
-                elif self.hand_value(player.hands[0]) == self.hand_value(dealer.hands[0]):
-                    # we are going to treat this as a loss for now
-                    winners.append(False)
+            standingOfHands = []
+            for hand in player.hands:
+                if not hand.busted:
+                    if dealer.hands[0].busted == True:
+                        standingOfHands.append(1)
+                    else:    
+                        if hand.hand_value() > dealerScore:
+                            standingOfHands.append(1)
+                        elif hand.hand_value() == dealerScore:
+                            standingOfHands.append(0)
+                        else:
+                            standingOfHands.append(-1)
                 else:
-                    winners.append(False)
-            except IndexError:
-                # IndexError occurs when a player has no hand because they busted
-                winners.append(False)
-        return winners
+                    standingOfHands.append(-1)
+            standingOfPlayers.append(standingOfHands)
+        return standingOfPlayers
 
     def play(self, numPlayers) -> None:
         d = Display()
@@ -113,9 +92,9 @@ class Game:
 
             for i in range(2):
                 for player in players:
-                    player.hands[0].append(self.deck.deal())
+                    player.hit(self.deck.deal())
 
-                dealer.hands[0].append(self.deck.deal())
+                dealer.hit(self.deck.deal())
 
             for player in players:
                 d.display_hand(player.hands[0], players.index(player))
@@ -141,7 +120,7 @@ class Game:
                     while not playerStand or playerBusted:
                         choice = d.prompt_player(players.index(player))
                         if choice == 'h':
-                            self.hit_player(players, players.index(player), self.deck)
+                            self.hit_player(player, 0, self.deck)
                             d.display_hand(player.hands[0], players.index(player))
                             if self.check_if_busted(player, players):
                                 d.display_busted(player, players)
