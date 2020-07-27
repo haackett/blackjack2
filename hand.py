@@ -43,3 +43,10 @@ class Hand:
         for value in values:
             sum = value + sum
         return sum
+
+    def check_splittable(self) -> bool:
+        splittable = False
+        if len(self.cards) == 2:
+            if self.cards[0].value == self.cards[1].value:
+                splittable = True
+        return splittable

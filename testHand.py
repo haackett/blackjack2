@@ -77,6 +77,11 @@ class Tests(unittest.TestCase):
         h.cards = [ace,ace,ace,ace,queen,king]
         self.assertEqual(h.hand_value(), 24)
 
+    def test_check_splittable(self):
+        h = Hand([six, seven])
+        self.assertEqual(h.check_splittable(), False)
+        h.cards = [six, six]
+        self.assertEqual(h.check_splittable(), True)
 
 
 if __name__ == '__main__':
