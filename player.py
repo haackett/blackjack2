@@ -16,3 +16,7 @@ class Player:
             self.hands[handIndex].add_card(card)
         except:
             self.hands.append(Hand(cards=[card]))
+    
+    def split(self, handIndex):
+        self.hands.append(Hand([self.hands[handIndex].cards[0]]))
+        del self.hands[handIndex].cards[0]

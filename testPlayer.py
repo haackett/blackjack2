@@ -32,5 +32,10 @@ class Tests(unittest.TestCase):
         self.assertEqual(self.p.hands[0].cards, [card,card])
         self.assertEqual(self.p.hands[1].cards, [card])
 
+    def test_split(self):
+        self.p.hands = [Hand(['d','d'])]
+        self.p.split(0)
+        self.assertEqual(self.p.hands[0].cards, ['d'])
+        self.assertEqual(self.p.hands[1].cards, ['d'])
 if __name__ == '__main__':
     unittest.main(verbosity=2)
