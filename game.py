@@ -122,7 +122,7 @@ class Game:
                         if choice == 'h':
                             self.hit_player(player, 0, self.deck)
                             d.display_hand(player.hands[0], players.index(player))
-                            if self.check_if_busted(player, players):
+                            if self.check_if_busted(player):
                                 d.display_busted(player, players)
                                 playerBusted = True
                         elif choice == 's':
@@ -132,11 +132,11 @@ class Game:
                 d.display_dealer_hand(dealer, hidden= False)
                 self.hit_dealer(dealer, self.deck)
                 d.display_dealer_hand(dealer, hidden= False)
-                if (self.hand_value(dealer.hands[0]) > 21):
+                if (dealer.hands[0].hand_value() > 21):
                     self.bust_dealer(dealer)
                     d.display_busted(dealer, players)
 
-                d.display_winning_players(self.determine_winners(dealer, players))
+                d.display_winning_players(self.determine_standing(dealer, players))
 
                 winner_determined = True
             
