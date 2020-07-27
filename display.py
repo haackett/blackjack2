@@ -2,6 +2,7 @@ from typing import List
 from card import Card
 from deck import Deck
 from player import Player
+from hand import Hand
 
 class Display:
     
@@ -20,26 +21,28 @@ class Display:
             if blackjacks[i]:
                 print("Player %s has blackjack." % (i - 1))
 
-    def display_hand(self, hand: List[Card], playerID) -> None:
+    def display_hand(self, hand: Hand, playerID) -> None:
             print("Player %s's hand is: " % (playerID))
-            for card in hand:
+            for card in hand.cards:
                 print("%s of %s" % (card.value, card.suit))
 
-    def display_winning_players(self, winners: List[bool]) -> None:
+    def display_winning_players(self, winners: List[List[int]]) -> None:
         #TODO include amount of money player won in this print statement
-        if winners.count(True) == 0:
-            print("The house wins.")
-        else:
-            for index, player in enumerate(winners):
-                if player:
-                    print("Player %s wins!" % (index))
-
+        for playerIndex, player in enumerate(winners):
+            for handIndex, hand in enumerate(player):
+                if hand == 1:
+                    print("Player %s hand %s wins!" % (playerIndex, handIndex))
+                elif hand == 0:
+                    print("Player %s hand %s pushes." % (playerIndex, handIndex))
+                if hand == -1:
+                    print("Player %s hand %s loses." % (playerIndex, handIndex))
+                    
     def display_dealer_hand(self, dealer: Player, hidden=True) -> None:
         print("The dealer hand is: ")
         if hidden:
-            print("%s of %s" % (dealer.hands[0][0].value, dealer.hands[0][0].suit))
+            print("%s of %s" % (dealer.hands[0].cards[0].value, dealer.hands[0].cards[0].suit))
         else:
-            for card in dealer.hands[0]:
+            for card in dealer.hands[0].cards:
                 print("%s of %s" % (card.value, card.suit))
 
     def prompt_player(self, playerID: int) -> str:
