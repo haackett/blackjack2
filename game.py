@@ -76,11 +76,15 @@ class Game:
             standingOfPlayers.append(standingOfHands)
         return standingOfPlayers
 
+    def reset_player_hands(self, players: List[Player]) -> None:
+        for player in players:
+            player.hands.clear()
+    
     def play(self, numPlayers) -> None:
         d = Display()
         playing = True
         players = []
-        
+
         for i in range(numPlayers):
                 players.append(Player())
             
@@ -141,6 +145,8 @@ class Game:
 
                 winner_determined = True
             
+            self.reset_player_hands(players)
+
             playingPrompt = input("Play again? (Enter a blank line to quit): ")
             if playingPrompt == '':
                 playing = False

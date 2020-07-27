@@ -120,5 +120,18 @@ class Tests(unittest.TestCase):
         self.assertEqual(g.determine_standing(dealer, [losingPlayer, winningPlayer, pushPlayer]), [[1], [1], [1]])
         self.assertEqual(g.determine_standing(dealer, [twoHandPlayer, winningPlayer, pushPlayer]), [[1, 1], [1], [1]])
 
+    def test_reset_player_hands(self):
+        g = Game(Deck)
+        players = []
+        p = Player()
+        p.hands.append([ace, ace])
+        p2 = Player()
+        p2.hands.append([ace, ace])
+        p2.hands.append([six, six])
+        players.append(p)
+        players.append(p2)
+        g.reset_player_hands(players)
+        self.assertEqual(players[0].hands, [])
+        self.assertEqual(players[1].hands, [])
 if __name__ == '__main__':
     unittest.main(verbosity=2)
