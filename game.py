@@ -80,13 +80,14 @@ class Game:
         d = Display()
         playing = True
         players = []
+        
+        for i in range(numPlayers):
+                players.append(Player())
+            
 
         self.deck.shuffle()
 
         while playing:
-            
-            for i in range(numPlayers):
-                players.append(Player())
             
             dealer = Player(isDealer=True)
 
@@ -143,3 +144,4 @@ class Game:
             playingPrompt = input("Play again? (Enter a blank line to quit): ")
             if playingPrompt == '':
                 playing = False
+            print("\n\n\n\n\n")
