@@ -20,8 +20,11 @@ valueConversions = {
     'Ace' : 11
 }
 
-""" Cool new comment """
-
+class Card:
+    def __init__(self, value, suit):
+        self.value = value
+        self.suit = suit
+    
 class Deck:
     def __init__(self):
         self._cards = [Card(value,suit) for value in values for suit in suits]
