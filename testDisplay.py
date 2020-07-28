@@ -4,6 +4,7 @@ from card import Card
 from deck import Deck
 from player import Player
 from io import StringIO
+from hand import Hand
 import unittest
 import sys
 
@@ -40,7 +41,7 @@ class Tests(unittest.TestCase):
     def test_display_hand(self):
         capturedOutput = StringIO()
         sys.stdout = capturedOutput
-        hand = [Card('Ace','Spades'),Card('2','Clubs')]
+        hand = Hand([Card('Ace','Spades'),Card('2','Clubs')])
         self.d.display_hand(hand, 0)
         self.assertEqual(capturedOutput.getvalue(), "Player 0's hand is: \nAce of Spades\n2 of Clubs\n")
         capturedOutput.close()
@@ -48,17 +49,16 @@ class Tests(unittest.TestCase):
     def test_display_winning_players(self):
         capturedOutput = StringIO()
         sys.stdout = capturedOutput
-        self.d.display_winning_players([False, False])
-        self.d.display_winning_players([True,True])
-        self.assertEqual(capturedOutput.getvalue(), "The house wins.\nPlayer 0 wins!\nPlayer 1 wins!\n")
+        self.d.display_winning_players([[0],[1]])
+        self.d.display_winning_players([[0],[-1,1]])
+        self.assertEqual(capturedOutput.getvalue(), "Player 0 hand 0 pushes.\nPlayer 1 hand 0 wins!\nPlayer 0 hand 0 pushes.\nPlayer 1 hand 0 loses.\nPlayer 1 hand 1 wins!\n")
         capturedOutput.close()
-
 
     def test_display_dealer_hand(self):
         capturedOutput = StringIO()
         sys.stdout = capturedOutput
         dealer = Player(isDealer=True)
-        dealer.hands[0] = [Card("2","Spades"), Card("8","Spades")]
+        dealer.hands.append(Hand([Card("2","Spades"), Card("8","Spades")]))
         self.d.display_dealer_hand(dealer)
         self.d.display_dealer_hand(dealer, hidden=False)
         self.assertEqual(capturedOutput.getvalue(), "The dealer hand is: \n2 of Spades\nThe dealer hand is: \n2 of Spades\n8 of Spades\n")

@@ -1,14 +1,22 @@
+from hand import Hand
+
 class Player:
     def __init__(self, isDealer= False):
-        self.hands = [[]]
+        self.hands = []
         self.isDealer = isDealer
 
     def bust_hand(self, handIndex=0):
-        del self.hands[handIndex]
+        self.hands[handIndex].busted = True
+
+    def add_hand(self):
+        self.hands.append(Hand())
 
     def hit(self, card, handIndex=0):
         try:  
-            self.hands[handIndex].append(card)
+            self.hands[handIndex].add_card(card)
         except:
-            self.hands.append([])
-            self.hands[handIndex].append(card)
+            self.hands.append(Hand(cards=[card]))
+    
+    def split(self, handIndex):
+        self.hands.append(Hand([self.hands[handIndex].cards[0]]))
+        del self.hands[handIndex].cards[0]
