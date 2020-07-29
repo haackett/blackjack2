@@ -1,9 +1,9 @@
 from typing import List
-from card import Card
-from deck import Deck
-from player import Player
-from display import Display
-from hand import Hand
+from blackjack.card import Card
+from blackjack.deck import Deck
+from blackjack.player import Player
+from blackjack.display import Display
+from blackjack.hand import Hand
 
 valueConversions = {
     '2' : 2,
@@ -151,3 +151,6 @@ class Game:
             if playingPrompt == '':
                 playing = False
             print("\n\n\n\n\n")
+
+
+

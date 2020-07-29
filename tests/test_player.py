@@ -1,7 +1,7 @@
 import unittest
-from player import Player
-from card import Card
-from hand import Hand
+from blackjack.player import Player
+from blackjack.card import Card
+from blackjack.hand import Hand
 
 class Tests(unittest.TestCase):
     p = Player()
@@ -39,3 +39,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(self.p.hands[1].cards, ['d'])
 if __name__ == '__main__':
     unittest.main(verbosity=2)
+
+
+
+

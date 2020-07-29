@@ -1,5 +1,5 @@
 import random
-from card import Card
+from blackjack.card import Card
 values = ['2','3','4','5','6','7','8','9','10','Jack','Queen','King','Ace']
 suits = ['Clubs','Diamonds','Hearts','Spades']
 
