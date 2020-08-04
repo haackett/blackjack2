@@ -1,4 +1,4 @@
-from hand import Hand
+from blackjack.hand import Hand
 
 class Player:
     def __init__(self, isDealer= False):

@@ -1,11 +1,11 @@
 import unittest
 import random
-from game import Game
-from deck import Deck
-from card import Card
-from player import Player
+from blackjack.game import Game
+from blackjack.deck import Deck
+from blackjack.card import Card
+from blackjack.player import Player
 from typing import List
-from hand import Hand
+from blackjack.hand import Hand
 
 #create one of each card value to test with
 two = Card('2', 'Clubs')

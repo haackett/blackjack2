@@ -1,6 +1,6 @@
-from hand import Hand
+from blackjack.hand import Hand
 import unittest
-from card import Card
+from blackjack.card import Card
 
 #create one of each card value to test with
 two = Card('2', 'Clubs')

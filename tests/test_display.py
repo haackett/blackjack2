@@ -1,10 +1,10 @@
-from display import Display
+from blackjack.display import Display
 from typing import List
-from card import Card
-from deck import Deck
-from player import Player
+from blackjack.card import Card
+from blackjack.deck import Deck
+from blackjack.player import Player
 from io import StringIO
-from hand import Hand
+from blackjack.hand import Hand
 import unittest
 import sys
 

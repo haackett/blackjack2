@@ -1,5 +1,5 @@
 from typing import List
-from card import Card
+from blackjack.card import Card
 
 valueConversions = {
     '2' : 2,

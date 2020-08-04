@@ -1,8 +1,8 @@
 from typing import List
-from card import Card
-from deck import Deck
-from player import Player
-from hand import Hand
+from blackjack.card import Card
+from blackjack.deck import Deck
+from blackjack.player import Player
+from blackjack.hand import Hand
 
 class Display:
     

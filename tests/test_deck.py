@@ -1,6 +1,6 @@
 import unittest
 import random
-from deck import Deck
+from blackjack.deck import Deck
 from typing import List 
 
 class Tests(unittest.TestCase):
