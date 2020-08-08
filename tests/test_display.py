@@ -6,6 +6,7 @@ from blackjack.player import Player
 from io import StringIO
 from blackjack.hand import Hand
 import unittest
+from unittest.mock import patch
 import sys
 
 class Tests(unittest.TestCase):
@@ -63,9 +64,14 @@ class Tests(unittest.TestCase):
         self.d.display_dealer_hand(dealer, hidden=False)
         self.assertEqual(capturedOutput.getvalue(), "The dealer hand is: \n2 of Spades\nThe dealer hand is: \n2 of Spades\n8 of Spades\n")
         capturedOutput.close()
+    
+    @patch('blackjack.display.Display.get_input', return_value='h')
+    def test_choice_hit(self, return_value):
+        self.assertEqual(self.d.prompt_player(0), 'h')
 
-    def test_prompt_player(self):
-        raise NotImplementedError
+    @patch('blackjack.display.Display.get_input', return_value='s')
+    def test_choice_stay(self, return_value):
+        self.assertEqual(self.d.prompt_player(0), 's')
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

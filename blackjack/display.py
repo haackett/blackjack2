@@ -45,8 +45,11 @@ class Display:
             for card in dealer.hands[0].cards:
                 print("%s of %s" % (card.value, card.suit))
 
+    def get_input(self, prompt) -> None:
+        return input(prompt)
+
     def prompt_player(self, playerID: int) -> str:
-        choice = input("Player " + str(playerID) + ", would you like to hit ('h') or stand ('s')").lower()
+        choice = self.get_input("Player " + str(playerID) + ", would you like to hit ('h') or stand ('s')").lower()
         while choice not in ['h','s','hit','stand']:
             choice = input("Please enter 'h' or 's'")
 
