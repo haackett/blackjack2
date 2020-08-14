@@ -71,3 +71,9 @@ class Display:
         except ValueError:
             print("Please enter a number.")
             self.prompt_player_for_bet(player, players)
+
+    def display_stacks(self, players) -> None:
+        for playerIndex, player in enumerate(players):
+            print("Player " + str(playerIndex) + "'s stack: $" + str(player.stack))
+
+
