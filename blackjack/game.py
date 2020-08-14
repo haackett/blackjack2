@@ -4,6 +4,7 @@ from blackjack.deck import Deck
 from blackjack.player import Player
 from blackjack.display import Display
 from blackjack.hand import Hand
+from blackjack.betting import *
 
 valueConversions = {
     '2' : 2,
@@ -87,11 +88,22 @@ class Game:
 
         for i in range(numPlayers):
                 players.append(Player())
-            
 
+        #Give each player a stack of 100 for now
+        for player in players:
+            buyin(player, 100)
+
+        
+            
         self.deck.shuffle()
 
         while playing:
+
+            d.display_stacks(players)
+            
+            for player in players:
+                player_bet = d.prompt_player_for_bet(player, players)
+                bet(player, float(player_bet))
             
             dealer = Player(isDealer=True)
 
@@ -116,7 +128,7 @@ class Game:
 
             for i in range(len(blackjacks)):
                 if blackjacks[i] and not winner_determined:
-                    # TODO pay players[i] their bet with a function
+                    pay_blackjack(blackjacks, players)
                     del players[i].hands[0]
 
             while not winner_determined:
@@ -141,7 +153,9 @@ class Game:
                     self.bust_dealer(dealer)
                     d.display_busted(dealer, players)
 
-                d.display_winning_players(self.determine_standing(dealer, players))
+                playerStandings = self.determine_standing(dealer, players)
+                d.display_winning_players(playerStandings)
+                pay_players(playerStandings, players)
 
                 winner_determined = True
             
