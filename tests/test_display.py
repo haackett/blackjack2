@@ -73,6 +73,25 @@ class Tests(unittest.TestCase):
     def test_choice_stay(self, return_value):
         self.assertEqual(self.d.prompt_player(0), 's')
 
+    @patch('blackjack.display.Display.get_input', return_value = 5)
+    def test_valid_bet(self,return_value):
+        p = Player()
+        p.stack = 5
+        players = [p]
+        self.assertEqual(self.d.prompt_player_for_bet(p, players), 5)
+
+    #TODO How do we test these invalid cases when they trigger infinite recursion? 
+    """
+    @patch('blackjack.display.Display.get_input', return_value = 5)
+    def test_invalid_bet_amount(self, return_value):
+        p = Player()
+        p.stack = 0
+        players = [p]
+        capturedOutput = StringIO()
+        sys.stdout = capturedOutput
+        self.d.prompt_player_for_bet(p, players)
+        self.assertEqual(capturedOutput.getvalue(), "Player 0, what would you like to bet?\nPlease enter a bet less than or equal to 0\n")
+    """
 if __name__ == "__main__":
     unittest.main(verbosity=2)
 

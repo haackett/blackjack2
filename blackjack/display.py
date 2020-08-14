@@ -3,6 +3,7 @@ from blackjack.card import Card
 from blackjack.deck import Deck
 from blackjack.player import Player
 from blackjack.hand import Hand
+from blackjack.betting import is_bet_valid
 
 class Display:
     
@@ -57,3 +58,16 @@ class Display:
             return 'h'
         elif choice in ['s','stand']:
             return 's'
+
+    def prompt_player_for_bet(self, player : Player, players : List[Player]) -> float:
+        bet = self.get_input("Player " + str(players.index(player)) + ", what would you like to bet?")
+        try:
+            if is_bet_valid(player, float(bet)):
+                return bet
+            else: 
+                print("Please enter a bet less than or equal to " + str(player.stack))
+                self.prompt_player_for_bet(player, players)
+
+        except ValueError:
+            print("Please enter a number.")
+            self.prompt_player_for_bet(player, players)
