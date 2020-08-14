@@ -11,6 +11,13 @@ class Tests(unittest.TestCase):
         buyin(p, 100)
         self.assertEqual(p.stack, 100)
 
+    def test_is_bet_valid(self):
+        p = Player()
+        p.stack = 0
+        self.assertEqual(is_bet_valid(p, 5), False)
+        p.stack = 5
+        self.assertEqual(is_bet_valid(p, 5), True)
+        
     def test_bet(self):
         p = Player()
         p.stack = 100
