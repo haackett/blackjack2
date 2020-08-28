@@ -84,6 +84,14 @@ class Game:
     def pay_player(self, player : Player, payMod) -> None:
         pay(player, player.bet * payMod)
 
+    def pay_blackjacks(self, blackjacks, winner_determined, players) -> None:
+        for i in range(len(blackjacks[1:])):
+                if blackjacks[i+1] and not winner_determined:
+                    self.pay_player(players[i], 2.5)
+                    del players[i].hands[0]
+                elif blackjacks[i+1]:
+                    self.pay_player(players[i], 1)
+
     def play(self, numPlayers) -> None:
         d = Display()
         playing = True
@@ -129,11 +137,7 @@ class Game:
             if blackjacks[0]:
                 winner_determined = True
                 
-
-            for i in range(len(blackjacks)):
-                if blackjacks[i] and not winner_determined:
-                    self.pay_player(players[i], 2.5)
-                    del players[i].hands[0]
+            self.pay_blackjacks(blackjacks, winner_determined, players)
 
             while not winner_determined:
                 for player in players:

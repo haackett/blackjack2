@@ -144,5 +144,27 @@ class Tests(unittest.TestCase):
         self.assertEqual(players[0].stack, 20)
         self.assertEqual(players[1].stack, 25)
         
+    def test_pay_blackjacks(self):
+        g = Game([])
+        players = [Player(), Player()]
+        players[0].bet = 10
+        players[1].bet = 10
+        players[0].hands.append([two, two])
+        players[1].hands.append([two, two])
+        #dealer without, player 0 with, player 1 without bj
+        g.pay_blackjacks([False, True, False], False, players)
+        self.assertEqual(players[0].stack, 25)
+        self.assertEqual(players[1].stack, 0)
+        self.assertEqual(len(players[0].hands), 0)
+        self.assertEqual(len(players[1].hands), 1)
+
+        players[0].hands.append([two, two])
+        #dealer with, player 0 with, player 1 without bj
+        g.pay_blackjacks([True, False, False], True, players)
+        self.assertEqual(players[0].stack, 25)
+        self.assertEqual(players[1].stack, 0)
+        self.assertEqual(len(players[0].hands), 1)
+        self.assertEqual(len(players[1].hands), 1)
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
