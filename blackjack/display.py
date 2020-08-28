@@ -49,15 +49,25 @@ class Display:
     def get_input(self, prompt) -> None:
         return input(prompt)
 
-    def prompt_player(self, playerID: int) -> str:
-        choice = self.get_input("Player " + str(playerID) + ", would you like to hit ('h') or stand ('s')").lower()
-        while choice not in ['h','s','hit','stand']:
-            choice = input("Please enter 'h' or 's'")
-
-        if choice in ['h','hit']:
-            return 'h'
-        elif choice in ['s','stand']:
-            return 's'
+    def prompt_player(self, playerID: int, splittable=False) -> str:
+        if splittable:
+            choice = self.get_input("Player " + str(playerID) + ", would you like to hit ('h'), stand ('s'), or split ('p')").lower()
+            while choice not in ['h','s', 'p', 'hit','stand', 'split']:
+                choice = input("Please enter 'h' or 's' or 'p'")
+            if choice in ['h','hit']:
+                return 'h'
+            elif choice in ['s','stand']:
+                return 's'
+            elif choice in ['p', 'split']:
+                return 'p'
+        else:
+            choice = self.get_input("Player " + str(playerID) + ", would you like to hit ('h') or stand ('s')").lower()
+            while choice not in ['h','s','hit','stand']:
+                choice = input("Please enter 'h' or 's'")
+            if choice in ['h','hit']:
+                return 'h'
+            elif choice in ['s','stand']:
+                return 's'
 
     def prompt_player_for_bet(self, player : Player, players : List[Player]) -> float:
             bet = self.get_input("Player " + str(players.index(player)) + ", what would you like to bet?")

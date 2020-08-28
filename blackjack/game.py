@@ -92,6 +92,43 @@ class Game:
                 elif blackjacks[i+1]:
                     self.pay_player(players[i], 1)
 
+    def get_hand_decision(self, player, players, handIndex, d : Display) -> str:
+        if not player.hands[handIndex].complete:
+            if player.hands[handIndex].check_splittable() and len(player.hands) <= 3:
+                return d.prompt_player(players.index(player), splittable=True)
+            else: 
+                return d.prompt_player(players.index(player))
+        else:
+            #May remove this, for testing
+            return '-1'
+
+    def prompt_player(self, player, players, d : Display) -> None:
+        i = 0
+        #We start with the player's hand 0
+        while i < len(player.hands):
+            while True:
+                #Don't prompt if hand has been stood on
+                if player.hands[i].complete:
+                    break
+                d.display_hand(player.hands[i], players.index(player))
+                choice = self.get_hand_decision(player, players, i, d)
+                if choice == 'h':
+                    self.hit_player(player, 0, self.deck)
+                    d.display_hand(player.hands[0], players.index(player))
+                if self.check_if_busted(player):
+                    d.display_busted(player, players)
+                    break
+                elif choice == 's':
+                    player.hands[i].complete = True
+                    break
+                elif choice == 'sp':
+                    player.split(i)
+                    #Loop through prompts again
+                    self.prompt_player(player, players, d)
+
+            #go to next hand
+            i += 1
+
     def play(self, numPlayers) -> None:
         d = Display()
         playing = True
@@ -141,19 +178,8 @@ class Game:
 
             while not winner_determined:
                 for player in players:
-                    playerStand, playerBusted = False, False
-                    while not playerStand or playerBusted:
-                        choice = d.prompt_player(players.index(player))
-                        if choice == 'h':
-                            self.hit_player(player, 0, self.deck)
-                            d.display_hand(player.hands[0], players.index(player))
-                            if self.check_if_busted(player):
-                                d.display_busted(player, players)
-                                playerBusted = True
-                        elif choice == 's':
-                            playerStand = True
+                    self.prompt_player(player, players, d)
                     
-
                 d.display_dealer_hand(dealer, hidden= False)
                 self.hit_dealer(dealer, self.deck)
                 d.display_dealer_hand(dealer, hidden= False)

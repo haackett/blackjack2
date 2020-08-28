@@ -20,6 +20,7 @@ valueConversions = {
 class Hand:
     def __init__(self, cards=[]):
         self.cards = cards
+        self.complete = False
         self.busted = False
 
     def add_card(self, card):
