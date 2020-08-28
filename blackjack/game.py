@@ -113,15 +113,15 @@ class Game:
                 d.display_hand(player.hands[i], players.index(player))
                 choice = self.get_hand_decision(player, players, i, d)
                 if choice == 'h':
-                    self.hit_player(player, 0, self.deck)
+                    self.hit_player(player, i, self.deck)
                     d.display_hand(player.hands[0], players.index(player))
-                if self.check_if_busted(player):
-                    d.display_busted(player, players)
-                    break
+                    if self.check_if_busted(player):
+                        d.display_busted(player, players)
+                        break
                 elif choice == 's':
                     player.hands[i].complete = True
                     break
-                elif choice == 'sp':
+                elif choice == 'p':
                     player.split(i)
                     #Loop through prompts again
                     self.prompt_player(player, players, d)
