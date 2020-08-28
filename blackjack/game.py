@@ -94,7 +94,7 @@ class Game:
 
     def get_hand_decision(self, player, players, handIndex, d : Display) -> str:
         if not player.hands[handIndex].complete:
-            if player.hands[handIndex].check_splittable() and len(player.hands) <= 3:
+            if player.hands[handIndex].check_splittable() and player.stack - player.bet >= 0:
                 return d.prompt_player(players.index(player), splittable=True)
             else: 
                 return d.prompt_player(players.index(player))
