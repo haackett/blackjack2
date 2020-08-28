@@ -4,6 +4,8 @@ class Player:
     def __init__(self, isDealer= False):
         self.hands = []
         self.isDealer = isDealer
+        self.stack = 0
+        self.bet = 0
 
     def bust_hand(self, handIndex=0):
         self.hands[handIndex].busted = True

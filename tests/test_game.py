@@ -133,5 +133,16 @@ class Tests(unittest.TestCase):
         g.reset_player_hands(players)
         self.assertEqual(players[0].hands, [])
         self.assertEqual(players[1].hands, [])
+
+    def test_pay_player(self):
+        g = Game([])
+        players = [Player(), Player()]
+        players[0].bet = 10
+        players[1].bet = 10
+        g.pay_player(players[0], 2)
+        g.pay_player(players[1], 2.5)
+        self.assertEqual(players[0].stack, 20)
+        self.assertEqual(players[1].stack, 25)
+        
 if __name__ == '__main__':
     unittest.main(verbosity=2)

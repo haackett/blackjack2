@@ -3,6 +3,7 @@ from blackjack.card import Card
 from blackjack.deck import Deck
 from blackjack.player import Player
 from blackjack.hand import Hand
+from blackjack.betting import is_bet_valid
 
 class Display:
     
@@ -45,8 +46,11 @@ class Display:
             for card in dealer.hands[0].cards:
                 print("%s of %s" % (card.value, card.suit))
 
+    def get_input(self, prompt) -> None:
+        return input(prompt)
+
     def prompt_player(self, playerID: int) -> str:
-        choice = input("Player " + str(playerID) + ", would you like to hit ('h') or stand ('s')").lower()
+        choice = self.get_input("Player " + str(playerID) + ", would you like to hit ('h') or stand ('s')").lower()
         while choice not in ['h','s','hit','stand']:
             choice = input("Please enter 'h' or 's'")
 
@@ -54,3 +58,23 @@ class Display:
             return 'h'
         elif choice in ['s','stand']:
             return 's'
+
+    def prompt_player_for_bet(self, player : Player, players : List[Player]) -> float:
+            bet = self.get_input("Player " + str(players.index(player)) + ", what would you like to bet?")
+            try:
+                if is_bet_valid(player, float(bet)):
+                    return bet
+                else: 
+                    print("Please enter a bet less than or equal to " + str(player.stack))
+                    return -1
+            except ValueError:
+                print("Please enter a number.")
+                return -1
+                
+            
+
+    def display_stacks(self, players) -> None:
+        for playerIndex, player in enumerate(players):
+            print("Player " + str(playerIndex) + "'s stack: $" + str(player.stack))
+
+

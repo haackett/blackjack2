@@ -4,6 +4,7 @@ from blackjack.deck import Deck
 from blackjack.player import Player
 from blackjack.display import Display
 from blackjack.hand import Hand
+from blackjack.betting import *
 
 valueConversions = {
     '2' : 2,
@@ -80,6 +81,9 @@ class Game:
         for player in players:
             player.hands.clear()
     
+    def pay_player(self, player : Player, payMod) -> None:
+        pay(player, player.bet * payMod)
+
     def play(self, numPlayers) -> None:
         d = Display()
         playing = True
@@ -87,11 +91,23 @@ class Game:
 
         for i in range(numPlayers):
                 players.append(Player())
-            
 
+        #Give each player a stack of 100 for now
+        for player in players:
+            buyin(player, 100)
+            
         self.deck.shuffle()
 
         while playing:
+
+            d.display_stacks(players)
+            
+            for player in players:
+                while True:
+                    player_bet = d.prompt_player_for_bet(player, players)
+                    if player_bet != -1:
+                        break
+                bet(player, float(player_bet))
             
             dealer = Player(isDealer=True)
 
@@ -116,7 +132,7 @@ class Game:
 
             for i in range(len(blackjacks)):
                 if blackjacks[i] and not winner_determined:
-                    # TODO pay players[i] their bet with a function
+                    self.pay_player(players[i], 2.5)
                     del players[i].hands[0]
 
             while not winner_determined:
@@ -141,8 +157,14 @@ class Game:
                     self.bust_dealer(dealer)
                     d.display_busted(dealer, players)
 
-                d.display_winning_players(self.determine_standing(dealer, players))
-
+                playerStandings = self.determine_standing(dealer, players)
+                d.display_winning_players(playerStandings)
+                for playerIndex, player in enumerate(playerStandings):
+                    for hand in player:
+                        if hand == 0:
+                            self.pay_player(players[playerIndex], 1)
+                        if hand == 1:
+                            self.pay_player(players[playerIndex], 2)
                 winner_determined = True
             
             self.reset_player_hands(players)
