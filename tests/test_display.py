@@ -42,7 +42,7 @@ class Tests(unittest.TestCase):
     def test_display_hand(self):
         capturedOutput = StringIO()
         sys.stdout = capturedOutput
-        hand = Hand([Card('Ace','Spades'),Card('2','Clubs')])
+        hand = Hand(cards=[Card('Ace','Spades'),Card('2','Clubs')])
         self.d.display_hand(hand, 0)
         self.assertEqual(capturedOutput.getvalue(), "Player 0's hand is: \nAce of Spades\n2 of Clubs\n")
         capturedOutput.close()
@@ -59,7 +59,7 @@ class Tests(unittest.TestCase):
         capturedOutput = StringIO()
         sys.stdout = capturedOutput
         dealer = Player(isDealer=True)
-        dealer.hands.append(Hand([Card("2","Spades"), Card("8","Spades")]))
+        dealer.hands.append(Hand(cards=[Card("2","Spades"), Card("8","Spades")]))
         self.d.display_dealer_hand(dealer)
         self.d.display_dealer_hand(dealer, hidden=False)
         self.assertEqual(capturedOutput.getvalue(), "The dealer hand is: \n2 of Spades\nThe dealer hand is: \n2 of Spades\n8 of Spades\n")

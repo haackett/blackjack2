@@ -18,10 +18,11 @@ valueConversions = {
 }
 
 class Hand:
-    def __init__(self, cards=[]):
+    def __init__(self, bet=0, cards=[]):
         self.cards = cards
         self.complete = False
         self.busted = False
+        self.bet = bet
 
     def add_card(self, card):
         self.cards.append(card)

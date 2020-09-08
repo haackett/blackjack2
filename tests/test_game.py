@@ -29,7 +29,7 @@ class Tests(unittest.TestCase):
             p = Player()
             g = Game([])
             cards = [queen, queen, queen]
-            p.hands = [Hand(cards)]
+            p.hands = [Hand(cards=cards)]
             g.check_if_busted(p)
             self.assertEqual(p.hands[0].busted, True)
 
@@ -38,27 +38,27 @@ class Tests(unittest.TestCase):
           players = [Player()]
 
           #check for dealer with blackjack and 1 player without blackjack
-          players[0].hands.append(Hand([two, three]))        
+          players[0].hands.append(Hand(cards=[two, three]))        
           dealer = Player(isDealer=True)
-          dealer.hands.append(Hand([ace, queen]))
+          dealer.hands.append(Hand(cards=[ace, queen]))
 
           self.assertEqual(g.check_for_blackjack(players, dealer), [True, False])
 
           #check for dealer with BJ and 1 player with BJ
-          players[0].hands[0] = Hand([ace, queen])
+          players[0].hands[0] = Hand(cards=[ace, queen])
           self.assertEqual(g.check_for_blackjack(players, dealer), [True, True])
 
           #check for dealer without BJ and 1 player with BJ
-          dealer.hands[0] = Hand([two, three])
+          dealer.hands[0] = Hand(cards=[two, three])
           self.assertEqual(g.check_for_blackjack(players, dealer), [False, True])
 
           #check for dealer without BJ and 2 players with BJ
           players.append(Player())
-          players[1].hands.append(Hand([ace, queen]))
+          players[1].hands.append(Hand(cards=[ace, queen]))
           self.assertEqual(g.check_for_blackjack(players, dealer), [False, True, True])
 
           #check for dealer without BJ, 1 player with BJ, and 1 player without
-          players[1].hands[0] = Hand([two, three])
+          players[1].hands[0] = Hand(cards=[two, three])
           self.assertEqual(g.check_for_blackjack(players, dealer), [False, True, False])
 
     def test_hit_player(self):
@@ -72,24 +72,24 @@ class Tests(unittest.TestCase):
         dealer = Player()
 
         #test with hand val < 17, expecting a hit
-        dealer.hands.append(Hand([two, two]))
+        dealer.hands.append(Hand(cards=[two, two]))
         g.hit_dealer(dealer, g.deck)
         self.assertGreater(len(dealer.hands[0].cards), 2)
 
         #test with hand val == 17, expecting a stand
-        dealer.hands[0] = Hand([queen, seven])
+        dealer.hands[0] = Hand(cards=[queen, seven])
         g.hit_dealer(dealer, g.deck)
         self.assertEqual(len(dealer.hands[0].cards), 2)
 
         #test with val > 17, expecting a stand
-        dealer.hands[0] = Hand([queen, queen])
+        dealer.hands[0] = Hand(cards=[queen, queen])
         g.hit_dealer(dealer, g.deck)
         self.assertEqual(len(dealer.hands[0].cards), 2)
 
     def test_bust_dealer(self):
         g = Game(Deck())
         dealer = Player()
-        dealer.hands.append(Hand([two]))
+        dealer.hands.append(Hand(cards=[two]))
         g.bust_dealer(dealer)
         self.assertEqual(dealer.hands[0].busted, True)
     
@@ -97,14 +97,14 @@ class Tests(unittest.TestCase):
         g = Game(Deck())
         dealer = Player()
         bustedPlayer,winningPlayer, losingPlayer, pushPlayer, twoHandPlayer = Player(), Player(), Player(), Player(), Player()
-        winningPlayer.hands.append(Hand([ace]))
-        losingPlayer.hands.append(Hand([nine]))
-        pushPlayer.hands.append(Hand([ten]))
+        winningPlayer.hands.append(Hand(cards=[ace]))
+        losingPlayer.hands.append(Hand(cards=[nine]))
+        pushPlayer.hands.append(Hand(cards=[ten]))
         bustedPlayer.hands.append(Hand())
         bustedPlayer.hands[0].busted = True
         #twoHand player has winning hand and losing hand
-        twoHandPlayer.hands = [Hand([ace]), Hand([nine])]
-        dealer.hands.append(Hand([ten]))
+        twoHandPlayer.hands = [Hand(cards=[ace]), Hand(cards=[nine])]
+        dealer.hands.append(Hand(cards=[ten]))
 
         self.assertEqual(g.determine_standing(dealer, [winningPlayer, winningPlayer, winningPlayer]), [[1], [1], [1]])
         self.assertEqual(g.determine_standing(dealer, [losingPlayer, losingPlayer, losingPlayer]), [[-1], [-1], [-1]])

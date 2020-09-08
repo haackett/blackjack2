@@ -15,6 +15,12 @@ class Tests(unittest.TestCase):
         #check that the player's hands are now empty
         self.assertEqual(self.p.hands[0].busted, True)
 
+    def test_add_hand(self):
+        self.p.stack = 100
+        self.p.bet = 10
+        self.p.add_hand([])
+        self.assertEqual(self.p.stack, 90)
+
     def test_hit(self):
         self.p.hands = []
         card = Card('a', 'b')
@@ -33,7 +39,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(self.p.hands[1].cards, [card])
 
     def test_split(self):
-        self.p.hands = [Hand(['d','d'])]
+        self.p.hands = [Hand(cards=['d','d'])]
         self.p.split(0)
         self.assertEqual(self.p.hands[0].cards, ['d'])
         self.assertEqual(self.p.hands[1].cards, ['d'])
