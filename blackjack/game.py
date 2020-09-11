@@ -4,6 +4,7 @@ from blackjack.deck import Deck
 from blackjack.player import Player
 from blackjack.display import Display
 from blackjack.hand import Hand
+from blackjack.shoe import Shoe
 from blackjack.betting import *
 
 valueConversions = {
@@ -23,8 +24,8 @@ valueConversions = {
 }
 
 class Game:
-    def __init__(self, deck: Deck) -> None:
-        self.deck = deck
+    def __init__(self, shoe : Shoe) -> None:
+        self.shoe = shoe
 
     def check_if_busted(self, player: Player) -> None:
         for index, hand in enumerate(player.hands):
@@ -99,7 +100,7 @@ class Game:
             else: 
                 return d.prompt_player(players.index(player))
         else:
-            #May remove this, for testing
+            #Will remove this, for testing
             return '-1'
 
     def prompt_player(self, player, players, d : Display) -> None:
@@ -113,7 +114,7 @@ class Game:
                 d.display_hand(player.hands[i], players.index(player))
                 choice = self.get_hand_decision(player, players, i, d)
                 if choice == 'h':
-                    self.hit_player(player, i, self.deck)
+                    self.hit_player(player, i, self.shoe)
                     d.display_hand(player.hands[0], players.index(player))
                     if self.check_if_busted(player):
                         d.display_busted(player, players)
@@ -141,11 +142,14 @@ class Game:
         for player in players:
             buyin(player, 100)
             
-        self.deck.shuffle()
-
         while playing:
 
             d.display_stacks(players)
+
+            #Check if a new shoe is needed
+            if self.shoe.get_num_cards_remaining() < 52:
+                #Rebuild shoe, effectively like getting a new one
+                self.shoe.build()
             
             for player in players:
                 while True:
@@ -158,9 +162,9 @@ class Game:
 
             for i in range(2):
                 for player in players:
-                    player.hit(self.deck.deal())
+                    player.hit(self.shoe.deal())
 
-                dealer.hit(self.deck.deal())
+                dealer.hit(self.shoe.deal())
 
             for player in players:
                 d.display_hand(player.hands[0], players.index(player))
@@ -181,7 +185,7 @@ class Game:
                     self.prompt_player(player, players, d)
                     
                 d.display_dealer_hand(dealer, hidden= False)
-                self.hit_dealer(dealer, self.deck)
+                self.hit_dealer(dealer, self.shoe)
                 d.display_dealer_hand(dealer, hidden= False)
                 if (dealer.hands[0].hand_value() > 21):
                     self.bust_dealer(dealer)

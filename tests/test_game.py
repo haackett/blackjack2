@@ -4,6 +4,7 @@ from blackjack.game import Game
 from blackjack.deck import Deck
 from blackjack.card import Card
 from blackjack.player import Player
+from blackjack.shoe import Shoe
 from typing import List
 from blackjack.hand import Hand
 
@@ -62,39 +63,39 @@ class Tests(unittest.TestCase):
           self.assertEqual(g.check_for_blackjack(players, dealer), [False, True, False])
 
     def test_hit_player(self):
-        g = Game(Deck())
+        g = Game(Shoe(1))
         p = Player()
-        g.hit_player(p, 0, g.deck)
+        g.hit_player(p, 0, g.shoe)
         self.assertEqual(len(p.hands), 1)
 
     def test_hit_dealer(self):
-        g = Game(Deck())
+        g = Game(Shoe(1))
         dealer = Player()
 
         #test with hand val < 17, expecting a hit
         dealer.hands.append(Hand(cards=[two, two]))
-        g.hit_dealer(dealer, g.deck)
+        g.hit_dealer(dealer, g.shoe)
         self.assertGreater(len(dealer.hands[0].cards), 2)
 
         #test with hand val == 17, expecting a stand
         dealer.hands[0] = Hand(cards=[queen, seven])
-        g.hit_dealer(dealer, g.deck)
+        g.hit_dealer(dealer, g.shoe)
         self.assertEqual(len(dealer.hands[0].cards), 2)
 
         #test with val > 17, expecting a stand
         dealer.hands[0] = Hand(cards=[queen, queen])
-        g.hit_dealer(dealer, g.deck)
+        g.hit_dealer(dealer, g.shoe)
         self.assertEqual(len(dealer.hands[0].cards), 2)
 
     def test_bust_dealer(self):
-        g = Game(Deck())
+        g = Game(Shoe(1))
         dealer = Player()
         dealer.hands.append(Hand(cards=[two]))
         g.bust_dealer(dealer)
         self.assertEqual(dealer.hands[0].busted, True)
     
     def test_determine_standing(self):
-        g = Game(Deck())
+        g = Game(Shoe(1))
         dealer = Player()
         bustedPlayer,winningPlayer, losingPlayer, pushPlayer, twoHandPlayer = Player(), Player(), Player(), Player(), Player()
         winningPlayer.hands.append(Hand(cards=[ace]))
@@ -121,7 +122,7 @@ class Tests(unittest.TestCase):
         self.assertEqual(g.determine_standing(dealer, [twoHandPlayer, winningPlayer, pushPlayer]), [[1, 1], [1], [1]])
 
     def test_reset_player_hands(self):
-        g = Game(Deck)
+        g = Game(Shoe(1))
         players = []
         p = Player()
         p.hands.append([ace, ace])
