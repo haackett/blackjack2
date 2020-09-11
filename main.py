@@ -1,5 +1,5 @@
-from blackjack.deck import Deck
 from blackjack.game import Game
+from blackjack.shoe import Shoe
 
 def main():
     while True:
@@ -10,7 +10,8 @@ def main():
         except ValueError:
             print("Invalid input! Must be an integer.")
 
-    g = Game(Deck())
+    numDecks = 6
+    g = Game(Shoe(numDecks))
     g.play(numPlayers)
 
 main()
