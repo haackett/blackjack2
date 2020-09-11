@@ -13,6 +13,10 @@ class Tests(unittest.TestCase):
         s = Shoe(1)
         self.assertIsNotNone(s.deal())
 
+    def test_get_num_cards_remaining(self):
+        s = Shoe(1)
+        self.assertEqual(s.get_num_cards_remaining(), 52)
+
     #TODO : a test to make sure the decks have shuffled invidiually
     # Maybe test the distance between cards of the same value and suit?
 

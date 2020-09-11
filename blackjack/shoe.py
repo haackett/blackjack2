@@ -24,3 +24,7 @@ class Shoe(Deck):
             cardsOut.append(cardsIn[randIndex])
             del cardsIn[randIndex]
         return cardsOut
+
+    def get_num_cards_remaining(self) -> int:
+        return len(self._cards)
+
