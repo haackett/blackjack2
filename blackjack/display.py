@@ -81,10 +81,10 @@ class Display:
                 print("Please enter a number.")
                 return -1
                 
-            
-
     def display_stacks(self, players) -> None:
         for playerIndex, player in enumerate(players):
             print("Player " + str(playerIndex) + "'s stack: $" + str(player.stack))
 
+    def display_changing_shoe(self) -> None:
+        print("Last deck reached. Getting new shoe...")
 

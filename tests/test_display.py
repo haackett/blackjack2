@@ -89,6 +89,12 @@ class Tests(unittest.TestCase):
         sys.stdout = capturedOutput
         self.d.prompt_player_for_bet(p, players)
         self.assertEqual(capturedOutput.getvalue(), "Please enter a bet less than or equal to 0\n")
+
+    def test_display_changing_shoe(self):
+        capturedOutput = StringIO()
+        sys.stdout = capturedOutput
+        self.d.display_changing_shoe()
+        self.assertEqual(capturedOutput.getvalue(), 'Last deck reached. Getting new shoe...\n')
     
 if __name__ == "__main__":
     unittest.main(verbosity=2)
